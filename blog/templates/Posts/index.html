@@ -1,0 +1,36 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+  Accueil
+{% endblock %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'mystyle.css' %}" />
+{% block body %}
+  <div class="row">
+    <h1 class="text-center alert alert-dark">FIL D'ACTUALITES</h1>
+    {% for posts in post %}
+      <div class="col-sm-4">
+        <div class="card">
+          {% if posts.image %}
+            <img src="{{ posts.image.url }}" class="card-img-top" alt="..." />
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">
+              {{ posts.titre }} |Posté par{% if posts.user == request.user %}
+                Moi
+              {% else %}
+                {{ posts.user.username }}
+              {% endif %}
+            </h5>
+            <p class="card-text">{{ posts.contenu|truncatechars:50 }}</p>
+            <a href="{% url 'showPost' posts.id %}" class="btn btn-primary">Voir plus</a>
+          </div>
+        </div>
+      </div><br />
+      {% empty %}
+      <h1 class="text-center">AUCUNE PUBLICATION POUR LE MOMENT</h1>
+      <div class="text-center">
+        <a class="btn btn-success col-lg-4" href="{% url 'newPost' %}">Créer une publication</a>
+      </div>
+    {% endfor %}
+  </div><br /><br />
+{% endblock %}

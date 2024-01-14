@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {% block style %}
+      {% load static %}
+      <link rel="stylesheet" type="text/css" href="{% static 'blog/css/bootstrap.css' %}" />
+    {% endblock %}
+    <title>
+      {% block title %}
+
+      {% endblock %}| Mon blog
+    </title>
+  </head>
+  <body>
+    <header>
+      {% include 'layouts/partials/header.html' %}
+    </header>
+    {% block body %}
+      <h1 class="text-center">Page par defaut</h1>
+    {% endblock %}
+
+    <footer>
+      {% include 'layouts/partials/footer.html' %}
+    </footer>
+  </body>
+  <script src="{% static 'blog/js/bootstrap.js' %}"></script>
+</html>

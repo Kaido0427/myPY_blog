@@ -1,0 +1,68 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+  Inscription
+{% endblock %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'accounts/css/bootstrap.css' %}" />
+{% block body %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <h3 class="text-center mb-3">Inscription</h3>
+        <form action="" method="post" enctype="multipart/form-data">
+          {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+              <p class="text-danger">
+                <strong>{{ error }}</strong>
+              </p>
+            {% endfor %}
+          {% endif %}
+          {% if proForm.non_field_errors %}
+            {% for error in proForm.non_field_errors %}
+              <p class="text-danger">
+                <strong>{{ error }}</strong>
+              </p>
+            {% endfor %}
+          {% endif %}
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="form-group">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.help_text %}
+                <p class="help">{{ field.help_text }}</p>
+              {% endif %}
+              {% if field.errors %}
+                {% for error in field.errors %}
+                  <p class="text-danger">
+                    <strong>{{ error }}</strong>
+                  </p>
+                {% endfor %}
+              {% endif %}
+            </div><br />
+          {% endfor %}
+          {% for field in proForm %}
+            <div class="form-group">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.help_text %}
+                <p class="help">{{ field.help_text }}</p>
+              {% endif %}
+              {% if field.errors %}
+                {% for error in field.errors %}
+                  <p class="text-danger">
+                    <strong>{{ error }}</strong>
+                  </p>
+                {% endfor %}
+              {% endif %}
+            </div><br />
+          {% endfor %}
+          <input class="btn btn-outline-dark" type="submit" value="S'inscrire" />
+        </form><br /><br />
+        <p class="text-center">
+          Vous aviez déja un compte? <a class="btn btn-dark" href="{% url 'login' %}">Connectez-vous</a>
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

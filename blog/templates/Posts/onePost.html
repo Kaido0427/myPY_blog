@@ -1,0 +1,87 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+  Details
+{% endblock %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'mystyle.css' %}" />
+{% block body %}
+  <div class="container">
+    <div class="row">
+      <h1 class="text-center alert alert-dark">DETAILS DE LA PUBLICATION</h1>
+      <div class="col">
+        <div class="card">
+          {% if post.image %}
+            <img src="{{ post.image.url }}" class="card-img-top" alt="..." />
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ post.titre }} |Posté par {{ post.user.username }}</h5>
+            <p class="card-text">{{ post.contenu }}</p>
+            <div class="justify-content-between">
+              {% if post.user == request.user %}
+                <a href="{% url 'updatePost' post.id %}" class="btn btn-warning">Modifier</a>
+                <a href="{% url 'deletePost' post.id %}" class="btn btn-danger">Supprimer</a>
+                <a class="btn btn-dark" href="{% url 'accueil' %}">Revenir à l'accueil</a>
+              {% else %}
+                <a class="btn btn-dark" href="{% url 'accueil' %}">Revenir à l'accueil</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><br>
+    <hr class="alert alert-danger" />
+    <h3 class="text-center">Commenter la publication</h3>
+    <form action="{% url 'newComment' post.id %}" method="post">
+      {% if comForm.non_field_errors %}
+        {% for error in form.non_field_errors %}
+          <p class="text-danger">
+            <strong>{{ error }}</strong>
+          </p>
+        {% endfor %}
+      {% endif %}
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.help_text %}
+            <p class="help">{{ field.help_text }}</p>
+          {% endif %}
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <p class="text-danger">
+                <strong>{{ error }}</strong>
+              </p>
+            {% endfor %}
+          {% endif %}
+        </div><br />
+      {% endfor %}
+      <input class="btn btn-outline-dark" type="submit" value="Soummettre un commentaire" />
+    </form><br /><br />
+  </div><br />
+  <hr />
+  <div class="container">
+    <div class="row">
+      <h2 class="text-center">Les commentaires</h2>
+      <div class="col">
+        {% for comms in comments %}
+          <div class="card">
+            <div class="card-header">{{ comms.user.username }}</div>
+            <div class="card-body">
+              <p class="card-text">{{ comms.contenu }}</p>
+            </div>
+            {% if comms.user == request.user %}
+              <div class="card-footer">
+                <a class="btn btn-outline-warning" href="{% url 'updateComment' comms.id %}">Modifier</a>
+                <a class="btn btn-outline-danger" href="{% url 'deleteComment' comms.id %}">Supprimer</a>
+              </div>
+            {% endif %}
+          </div><br />
+
+          {% empty %}
+          <h1 class="text-secondary text-center">AUCUN COMMENTAIRE POUR LE MOMENT</h1>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
